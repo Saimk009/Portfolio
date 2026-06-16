@@ -1,0 +1,252 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   CSS VARIABLES / DESIGN TOKENS
+   ============================================================ */
+:root {
+  --cyber-blue: #0ff0fc;
+  --cyber-blue-soft: #00bfff;
+  --cyber-blue-dim: rgba(15, 240, 252, 0.55);
+  --bg-dark: #050a0f;
+  --bg-panel: #070d14;
+  --glass: rgba(10, 20, 30, 0.45);
+  --glass-strong: rgba(10, 22, 34, 0.7);
+  --border-glow: rgba(15, 240, 252, 0.25);
+  --border-glow-strong: rgba(15, 240, 252, 0.6);
+  --text-primary: #d6f4f8;
+  --text-muted: #6f8a94;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'Share Tech Mono', ui-monospace, monospace;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Hide native cursor on devices that support a custom one (desktop / fine pointer) */
+@media (pointer: fine) {
+  body,
+  a,
+  button,
+  input,
+  textarea {
+    cursor: none;
+  }
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+::selection {
+  background: var(--cyber-blue);
+  color: var(--bg-dark);
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--cyber-blue-soft), var(--cyber-blue));
+  border-radius: 999px;
+  border: 2px solid var(--bg-dark);
+}
+
+/* ============================================================
+   ANIMATED GRID / SCANLINE BACKGROUND
+   Applied to fixed layer behind all content
+   ============================================================ */
+.cyber-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-color: var(--bg-dark);
+  overflow: hidden;
+}
+
+.cyber-bg::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background-image:
+    linear-gradient(rgba(15, 240, 252, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 240, 252, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: perspective(400px) rotateX(0deg);
+  animation: grid-drift 24s linear infinite;
+}
+
+/* Radial vignette so center is darker, edges glow softly */
+.cyber-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(15, 240, 252, 0.1), transparent 55%),
+    radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(5, 10, 15, 0.85) 100%);
+}
+
+@keyframes grid-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 48px;
+  }
+}
+
+/* Faint moving scanline overlay */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(15, 240, 252, 0.025) 0px,
+    rgba(15, 240, 252, 0.025) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  animation: scan-move 8s linear infinite;
+}
+
+@keyframes scan-move {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(4px);
+  }
+}
+
+/* ============================================================
+   GLASSMORPHISM
+   ============================================================ */
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glow);
+  box-shadow:
+    0 0 0 1px rgba(15, 240, 252, 0.04),
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 0 24px rgba(15, 240, 252, 0.03);
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+.glass-hover:hover {
+  border-color: var(--border-glow-strong);
+  box-shadow:
+    0 0 0 1px rgba(15, 240, 252, 0.1),
+    0 0 24px rgba(15, 240, 252, 0.18),
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    inset 0 0 24px rgba(15, 240, 252, 0.06);
+}
+
+/* ============================================================
+   UTILITY HELPERS
+   ============================================================ */
+.text-glow {
+  text-shadow: 0 0 18px rgba(15, 240, 252, 0.45);
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  color: var(--cyber-blue);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+/* HUD corner brackets */
+.hud-corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-color: var(--border-glow-strong);
+  pointer-events: none;
+}
+.hud-tl {
+  top: 0;
+  left: 0;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+.hud-tr {
+  top: 0;
+  right: 0;
+  border-top: 1px solid;
+  border-right: 1px solid;
+}
+.hud-bl {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+.hud-br {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+}
+
+/* Pulsing timeline dot */
+@keyframes dot-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(15, 240, 252, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(15, 240, 252, 0);
+  }
+}
+.dot-pulse {
+  animation: dot-pulse 2.2s ease-out infinite;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
