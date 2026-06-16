@@ -3,13 +3,26 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 
 const PROJECTS = [
   {
+    name: 'DevFlow',
+    tagline: 'Open-source CI/CD Dashboard',
+    description: [
+      'Unifies GitHub Actions and GitLab CI pipelines into one real-time dashboard.',
+      'Visualizes pipeline runs with a DAG interface, streaming build logs, workflow management, and runner monitoring.',
+      'Works out of the box with demo data and can switch to real GitHub or GitLab pipelines from Settings.',
+      'Keeps tokens inside the browser with no server, accounts, or telemetry.',
+      'Free forever, self-hostable, and MIT licensed.',
+    ],
+    tags: ['React 18', 'TypeScript', 'XState', 'React Flow', 'Zustand', 'CI/CD'],
+    live: 'https://saimk09devflow.vercel.app/onboarding',
+    span: true,
+  },
+  {
     name: 'Qkart',
     tagline: 'Full Stack E-commerce',
     description:
       'Full stack shopping app with auth, cart, checkout, address management, and debounced search. Backend uses JWT, Mongoose ODM, and a three-layer architecture (Route-Controller-Service). Tested with Jest.',
     tags: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT', 'REST API', 'Jest'],
     live: 'https://ksqkartfront.netlify.app/',
-    span: true,
   },
   {
     name: 'Qtrip',
@@ -34,14 +47,6 @@ const PROJECTS = [
       'React weather app with real-time data from a weather API. Displays temperature, humidity, and conditions by location input.',
     tags: ['React', 'API Integration', 'Vercel'],
     live: 'https://weather-xapp.vercel.app/',
-  },
-  {
-    name: 'XCountriesSearch',
-    tagline: 'Country Explorer',
-    description:
-      'Country search interface showing flags and names. Filterable, fast, and clean.',
-    tags: ['React', 'REST Countries API', 'Vercel'],
-    live: 'https://countries-search-x.vercel.app/',
   },
 ]
 
@@ -108,9 +113,20 @@ function ProjectCard({ project }) {
         </div>
       </div>
 
-      <p className="mt-4 flex-1 text-sm leading-relaxed text-[var(--text-muted)]">
-        {project.description}
-      </p>
+      {Array.isArray(project.description) ? (
+        <ul className="mt-4 flex-1 space-y-2 text-sm leading-relaxed text-[var(--text-muted)]">
+          {project.description.map((point) => (
+            <li key={point} className="flex gap-3">
+              <span className="mt-2 block h-1.5 w-1.5 shrink-0 rotate-45 bg-[var(--cyber-blue)]" />
+              <span>{point}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-4 flex-1 text-sm leading-relaxed text-[var(--text-muted)]">
+          {project.description}
+        </p>
+      )}
 
       <div className="mt-5 flex flex-wrap gap-2">
         {project.tags.map((t) => (
@@ -124,15 +140,17 @@ function ProjectCard({ project }) {
       </div>
 
       <div className="mt-6 flex gap-3">
-        <a
-          href={project.live}
-          target="_blank"
-          rel="noreferrer"
-          data-cursor="hover"
-          className="flex items-center gap-2 rounded-lg bg-[var(--cyber-blue)] px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--bg-dark)] transition-all hover:shadow-[0_0_22px_rgba(15,240,252,0.45)]"
-        >
-          Live Demo <ArrowIcon />
-        </a>
+        {project.live && (
+          <a
+            href={project.live}
+            target="_blank"
+            rel="noreferrer"
+            data-cursor="hover"
+            className="flex items-center gap-2 rounded-lg bg-[var(--cyber-blue)] px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-[var(--bg-dark)] transition-all hover:shadow-[0_0_22px_rgba(15,240,252,0.45)]"
+          >
+            Live Demo <ArrowIcon />
+          </a>
+        )}
         <a
           href="https://github.com/saimk09"
           target="_blank"
